@@ -1,40 +1,72 @@
 #include "main.h"
-#include <stdio.h>
 
 /**
- * _printf - Function produces output based on a format
+ * _printfunc - get the right function corresponding to format specified
+ * @fi: input format
+ * Return:pointer to function that corresponds with specified format
  *
- * @format: Character string
- * @...: Ellipses
- * Return: Number of the characters printed
  */
+int (*_printfunc(char fi))(va_list)
+{
+	int i = 0;
+	print_f f[] = {
+		{'c', printchar},
+		{'s', printstr},
+		{'d', printint},
+		{'i', printint},
+		{'\0', NULL}
+	};
+	while (f[i].type)
+	{
+		if (fi == f[i].type)
+		{
+			return (f[i].funct);
+		}
+		i++;
 
+	}
+	return (NULL);
+}
+
+/**
+ * _printf - function that produces output according to format passed
+ * @format: character string containing 0 or more directive
+ * Return: number of chars printed exluding null byte
+ */
 int _printf(const char *format, ...)
 {
-	va_list args;
-	char f;
-	int i, len;
-	int (*prints)(va_list *);
+	int i, counter;
 
-	va_start(args, format);
-	len = 0;
-	for (i = 0; format[i] != '\0'; i++)
+	int (*fn)(va_list);
+
+	va_list a_list;
+
+	if (format == NULL)
+		return (-1);
+
+	va_start(a_list, format);
+	i = counter = 0;
+
+	while (format[i] != '\0')
 	{
 		if (format[i] == '%')
 		{
-			i++; /* move to the next character */
-			f = format[i];
-
-
-			prints() = get_func(f);
-			len += prints(&args);
+			if (format[i + 1] == '\0')
+				return (-1);
+			fn = _printfunc(format[i + 1]);
+			if (fn == NULL)
+				counter += printNaN(format[i], format[i + 1]);
+			else
+				counter += fn(a_list);
+			i++;
 		}
 		else
 		{
-			len += write(1, &format[i], 1);
+			_putchar(format[i]);
+			counter++;
 		}
-	} /* End of for loop */
-	va_end(args);
-	return (len);
+		i++;
+	}
+	va_end(a_list);
+	return (counter);
 }
-
