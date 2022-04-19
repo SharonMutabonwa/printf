@@ -1,50 +1,34 @@
 #include "main.h"
+#include <stdio.h>
 
 /**
- * _printf - prints formatted data to stdout
- * @format: string that contains the format to print
- * Return: number of characters written
+ * _printf - Function to work like a printf function
+ * @format: the format of printing character
+ * Return: result.
  */
-int _printf(char *format, ...)
+int _printf(const char *format, ...)
 {
-	int written = 0, (*print_fn)(char *, va_list);
-	char specifier[3];
-	va_list args;
+	va_list valist;
+	int i = 0;
+	int result = 0;
 
-	if (format == NULL)
-		return (-1);
-	specifier[2] = '\0';
-	va_start(args, format);
-	_putchar(-1);
-	while (format[0])
+	va_start(valist, format);
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (format[0] == '%')
+		if (format[i] == '\0')
 		{
-			print_fn = get_print_fn(format);
-			if (print_fn)
-			{
-				specifier[0] = '%';
-				specifier[1] = format[1];
-				written += print_fn(specifier, args);
-			}
-			else if (format[1] != '\0')
-			{
-				written += _putchar('%');
-				written += _putchar(format[1]);
-			}
-			else
-			{
-				written += _putchar('%');
-				break;
-			}
-			format += 2;
+			break;
+		}
+		else if (format[i] == '%' && format[i + 1])
+		{
+			result += (*format_conversion(format[i + 1]))(valist);
+			i++;
 		}
 		else
 		{
-			written += _putchar(format[0]);
-			format++;
+			result += _putchar(format[i]);
 		}
 	}
-	_putchar(-2);
-	return (written);
+	va_end(valist);
+	return (result);
 }
