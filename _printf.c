@@ -1,75 +1,110 @@
 #include "main.h"
-
 /**
- * _printf - Function to work like a printf function
- * @format: the format of printing character
- * Return: result.
+ *_printf - printf
+ *@format: const char pointer
+ *Description: this functions implement some functions of printf
+ *Return: number of characteres printed
  */
-
-
 int _printf(const char *format, ...)
 {
-	va_list ap;
-	int i = 0, len = 0, k, j, counter = 0;
-	char *dest = NULL;
-	char *argStr;
+	const char *string;
+	int cont = 0;
+	va_list arg;
 
-	while (format[len] != '\0')
-		len++;
+	if (!format)
+		return (-1);
 
-	dest = malloc(sizeof(char) * len);
-	if (dest == NULL)
-		exit(1);
+	va_start(arg, format);
+	string = format;
 
-	va_start(ap, format);
-	while (format[i] != '\0')
+	cont = loop_format(arg, string);
+
+	va_end(arg);
+	return (cont);
+}
+/**
+ *loop_format - loop format
+ *@arg: va_list arg
+ *@string: pointer from format
+ *Description: This function make loop tp string pointer
+ *Return: num of characteres printed
+ */
+int loop_format(va_list arg, const char *string)
+{
+	int i = 0, flag = 0, cont_fm = 0, cont = 0, check_per = 0;
+
+	while (i < _strlen((char *)string) && *string != '\0')
 	{
-		if (format[i] == '%' && format[i + 1] == 'c')
+		char aux = string[i];
+
+		if (aux == '%')
 		{
-			argStr = malloc(sizeof(char) * 2);
-			argStr[0] = (char)va_arg(ap, int);
-			argStr[1] = '\0';
-			_count(&counter, argStr);
-			_sprintf(argStr);
-			free(argStr);
-			i += 2;
-		}
-		else if (format[i] == '%' && format[i + 1] == '%')
-		{
-			argStr = malloc(sizeof(char) * 2);
-			argStr[0] = '%';
-			argStr[1] = '\0';
-			_count(&counter, argStr);
-			_sprintf(argStr);
-			free(argStr);
-			i += 2;
-		}
-		else if (format[i] == '%' && format[i + 1] == 's')
-		{
-			argStr = va_arg(ap, char *);
-            		_count(&counter, argStr);
-            		_sprintf(argStr);
-            		i += 2;
-		}
-		else
-		{
-			for (j = i, k = 0; format[j] != '\0' ; k++, j++, i++)
+			i++, flag++;
+			aux = string[i];
+			if (aux == '\0' && _strlen((char *)string) == 1)
+				return (-1);
+			if (aux == '\0')
+				return (cont);
+			if (aux == '%')
 			{
-				if (format[j] == '%')
+				flag++;
+			} else
+			{
+				cont_fm = function_manager(aux, arg);
+				if (cont_fm >= 0 && cont_fm != -1)
 				{
-					i = j;
-					break;
-				}
-				else
+					i++;
+					aux = string[i];
+					if (aux == '%')
+						flag--;
+					cont = cont + cont_fm;
+				} else if (cont_fm == -1 && aux != '\n')
 				{
-					dest[k] = format[j];
+					cont += _putchar('%');
 				}
 			}
-			dest[k] = '\0';
-			_count(&counter, dest);
-			_sprintf(dest);
 		}
+		check_per = check_percent(&flag, aux);
+		cont += check_per;
+		if (check_per == 0 && aux != '\0' && aux != '%')
+			cont += _putchar(aux), i++;
+		check_per = 0;
 	}
+	return (cont);
+}
+/**
+ * check_percent - call function manager
+ *@flag: value by reference
+ *@aux: character
+ *Description: This function print % pear
+ *Return: 1 if % is printed
+ */
+int check_percent(int *flag, char aux)
+{
+	int tmp_flag;
+	int cont = 0;
 
-	return (counter);
+	tmp_flag = *flag;
+	if (tmp_flag == 2 && aux == '%')
+	{
+		_putchar('%');
+		tmp_flag = 0;
+		cont = 1;
+	}
+	return (cont);
+}
+/**
+ * call_function_manager - call function manager
+ *@aux: character parameter
+ *@arg: va_list arg
+ *Description: This function call function manager
+ *Return: num of characteres printed
+ */
+
+int call_function_manager(char aux, va_list arg)
+{
+	int cont = 0;
+
+	cont = function_manager(aux, arg);
+	return (cont);
 }
