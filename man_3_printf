@@ -65,6 +65,6 @@ _printf("%s, %s %d, %d\\n", weekday, month, day, year);
 .I printf(3)
 .SH BUGS
 No known bugs.
-.SH AUTHOR
-Ekunola Paul and Efebe Osakpolor
+
+# This Work was been submitted by Sharon Mutabonwa (https://github.com/SharonMutabonwa) and Ndahayo Bertin (https://github.com/Illustre13)
 // end
