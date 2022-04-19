@@ -6,45 +6,70 @@
  * Return: result.
  */
 
+
 int _printf(const char *format, ...)
 {
 	va_list ap;
-	int i = 0, j = 0;
-	int list;
-	char *str;
+	int i = 0, len = 0, k, j, counter = 0;
+	char *dest = NULL;
+	char *argStr;
+
+	while (format[len] != '\0')
+		len++;
+
+	dest = malloc(sizeof(char) * len);
+	if (dest == NULL)
+		exit(1);
 
 	va_start(ap, format);
-
 	while (format[i] != '\0')
 	{
-		if (format[i] != '%')
+		if (format[i] == '%' && format[i + 1] == 'c')
 		{
-		_putchar(format[i]);
-		list++;
+			argStr = malloc(sizeof(char) * 2);
+			argStr[0] = (char)va_arg(ap, int);
+			argStr[1] = '\0';
+			_count(&counter, argStr);
+			_sprintf(argStr);
+			free(argStr);
+			i += 2;
 		}
-		else if (format[i + 1] == 'c')
+		else if (format[i] == '%' && format[i + 1] == '%')
 		{
-		_putchar(va_arg(ap, int));
-		i++;
-		list++;
+			argStr = malloc(sizeof(char) * 2);
+			argStr[0] = '%';
+			argStr[1] = '\0';
+			_count(&counter, argStr);
+			_sprintf(argStr);
+			free(argStr);
+			i += 2;
 		}
-		else if (format[i + 1] == 's')
+		else if (format[i] == '%' && format[i + 1] == 's')
 		{
-
-		str = va_arg(ap, char *);
-		while (str[j] != '\0')
-		{
-			_putchar(str[j]);
-			j++;
-			list++;
+			argStr = va_arg(ap, char *);
+            		_count(&counter, argStr);
+            		_sprintf(argStr);
+            		i += 2;
 		}
-		else if (format[i + 1] == '%')
+		else
 		{
-			i++;
-			_putchar('%');
-			list++;
+			for (j = i, k = 0; format[j] != '\0' ; k++, j++, i++)
+			{
+				if (format[j] == '%')
+				{
+					i = j;
+					break;
+				}
+				else
+				{
+					dest[k] = format[j];
+				}
+			}
+			dest[k] = '\0';
+			_count(&counter, dest);
+			_sprintf(dest);
 		}
 	}
-	va_end(ap);
-	return (list);
+
+	return (counter);
 }

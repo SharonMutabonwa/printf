@@ -1,27 +1,15 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef PRINTF_H
+#define PRINTF_H
 
-#include <stdarg.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <limits.h>
 
-/**
- * struct fmt - structure
- * @F: char holding the format.
- * @T: pointer function.
- */
-typedef struct fmt
-{
-	char F;
-	int (*T)(va_list);
-} ft;
-
-
-int _putchar(char c);
+void _sprintf(const char *str);
 int _printf(const char *format, ...);
+void _count(int *ptr, char *str);
+
 
 #endif
-
-
