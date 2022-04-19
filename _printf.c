@@ -2,33 +2,39 @@
 #include <stdio.h>
 
 /**
- * _printf - Function to work like a printf function
- * @format: the format of printing character
- * Return: result.
+ * _printf - Function produces output based on a format
+ *
+ * @format: Character string
+ * @...: Ellipses
+ * Return: Number of the characters printed
  */
+
 int _printf(const char *format, ...)
 {
-	va_list valist;
-	int i = 0;
-	int result = 0;
+	va_list args;
+	char f;
+	int i, len;
+	int (*prints)(va_list *);
 
-	va_start(valist, format);
+	va_start(args, format);
+	len = 0;
 	for (i = 0; format[i] != '\0'; i++)
 	{
-		if (format[i] == '\0')
+		if (format[i] == '%')
 		{
-			break;
-		}
-		else if (format[i] == '%' && format[i + 1])
-		{
-			result += (*format_conversion(format[i + 1]))(valist);
-			i++;
+			i++; /* move to the next character */
+			f = format[i];
+
+
+			prints() = get_func(f);
+			len += prints(&args);
 		}
 		else
 		{
-			result += _putchar(format[i]);
+			len += write(1, &format[i], 1);
 		}
-	}
-	va_end(valist);
-	return (result);
+	} /* End of for loop */
+	va_end(args);
+	return (len);
 }
+
