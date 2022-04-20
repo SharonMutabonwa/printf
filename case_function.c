@@ -19,8 +19,9 @@ int print_character(va_list arg)
  * print_sign - print sign
  * @arg: va_list parameter
  * @base: base 10, 8, 16, 2 etc..
- * Description: print numbers and signed
- * Return: num of characters
+ *
+ * Description: print both positive numbers and signed numbers
+ * Return: number of characters
  */
 int print_sign(va_list arg, int base)
 {
