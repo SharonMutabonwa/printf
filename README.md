@@ -10,4 +10,5 @@
  Our Github Link are :
  - https://github.com/SharonMutabonwa
  - https://github.com/Illustre13
- The .gitignore used in this function to restrict an use of the file with main function in our directory.
+ The .gitignore used in this function to restrict an use of the file with main function in our directoryi.
+ Created new folder Test to putu in out testing file main.c
