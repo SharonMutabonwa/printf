@@ -14,6 +14,7 @@ int _putchar(char c)
 }
 /**
  *_strlen - reset number
+ *
  *Description: This function return a length for some string
  *@s: pointer char
  *Return: int length
@@ -30,6 +31,7 @@ int _strlen(char *s)
 }
 /**
  *_puts - print string
+ *
  *Description: print some string
  *@str: pointer char
  *Return: Nothing
